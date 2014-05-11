@@ -7,7 +7,7 @@
 ;; Author: Artem Petrov <pa2311@gmail.com>
 ;; Created: 11 May 2014
 ;; Keywords: csv parsing calculation
-;; Version: 0.1.0
+;; Version: 0.2.0
 
 ;; This file is not part of GNU Emacs.
 
@@ -28,7 +28,7 @@
 
 (message (concat "\n\tEmacs v" emacs-version " on "
                  (prin1-to-string system-type) " " system-name))
-(message "\tcsv-test v0.1.0\n")
+(message "\tcsv-test v0.2.0\n")
 
 ;;;; function definitions
 
@@ -41,21 +41,18 @@
 
 (let ((srcFileName "example/data.csv")
       (resultFileName (concat "result__" (format-time-string "%Y-%m-%d_%H-%M") ".csv"))
-      (nextLine t)
-      (begOfLine nil)
-      (endOfLine nil)
-      (currData nil)
-      (elemsOfString nil)
+      (numOfHeaderLines 1)
       (csvDelimiter ";")
-      )
+      (nextLine t)
+      (currData nil)
+      (elemsOfString nil))
   (find-file srcFileName)
   (goto-char (point-min))
-  (forward-line 1)
+  (forward-line numOfHeaderLines)
   (while nextLine
     (beginning-of-line)
-    (setq begOfLine (line-beginning-position))
-    (setq endOfLine (line-end-position))
-    (setq currData (buffer-substring-no-properties begOfLine endOfLine))
+    (setq currData (buffer-substring-no-properties
+                    (line-beginning-position) (line-end-position)))
     (when (not (equal (length currData) 0))
       (setq elemsOfString (split-string currData csvDelimiter t))
       (end-of-line)
